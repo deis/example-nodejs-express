@@ -1,4 +1,4 @@
 example-nodejs-express
 ======================
 
-Example Node.js/Express application for use with OpDemand.
+Node.js/Express example application for use with OpDemand
