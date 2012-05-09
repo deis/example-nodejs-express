@@ -1,17 +1,19 @@
 Node.js Quick Start Guide
 =========================
 
-This guide will get you up and running with Node.js using OpDemand.
+This guide will walk you through deploying a Node.js application on AWS using OpDemand.
 
 Prerequisites
 --------------
-* A free OpDemand account with active AWS credentials
+* A [free OpDemand account](https://app.opdemand.com/signup) with
+  * Valid AWS credentials
+  * Linked GitHub account
 * The OpDemand Command Line Interface
-* A Node.js application hosted on GitHub
+* A Node.js application that is **hosted on GitHub**
 
 Clone your Application
 ----------------------
-The simplest way to get started is by forking OpDemand's sample Node.js application located at:
+The simplest way to get started is by forking OpDemand's sample application located at:
 <https://github.com/opdemand/example-nodejs-express>
 
 After forking the project, clone it to your local workstation using the SSH-style URL:
@@ -19,7 +21,9 @@ After forking the project, clone it to your local workstation using the SSH-styl
     $ git clone git@github.com:gabrtv/example-nodejs-express.git example-nodejs-express
     $ cd example-nodejs-express
 
-Prepare Your Application
+If you want to use an existing application, no problem -- just make sure you've cloned it from GitHub.
+
+Prepare your Application
 ------------------------
 To use a Node.js application with OpDemand, you will need to conform to 3 basic requirements:
 
