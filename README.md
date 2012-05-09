@@ -16,8 +16,8 @@ The simplest way to get started is by forking OpDemand's sample Node.js applicat
 
 After forking the project, clone it to your local workstation using the SSH-style URL:
 
-  $ git clone git@github.com:gabrtv/example-nodejs-express.git example-nodejs-express
-	$ cd example-nodejs-express
+    $ git clone git@github.com:gabrtv/example-nodejs-express.git example-nodejs-express
+    $ cd example-nodejs-express
 
 Prepare Your Application
 ------------------------
