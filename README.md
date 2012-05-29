@@ -97,7 +97,7 @@ The same is true for external services like databases, caches and queues.  Here 
 	    showStack: true
 	  )
 
-Create a new Platform <a id="create"></a>
+<a id="create"></a>Create a new Platform
 ---------------------
 Use the `opdemand list` command to list the available infrastructure templates:
 
