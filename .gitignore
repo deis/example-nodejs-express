@@ -16,3 +16,4 @@ npm-debug.log
 
 # eclipse
 .project
+.DS_*
