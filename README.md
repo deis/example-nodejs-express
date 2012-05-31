@@ -28,7 +28,7 @@ Prepare your Application
 ------------------------
 To use a Node.js application with OpDemand, you will need to conform to 3 basic requirements:
 
- * Use **NPM** to manage dependencies
+ * Use [**NPM**](http://search.npmjs.org/) to manage dependencies
  * Use **Foreman** to manage processes
  * Use **Environment Variables** to manage configuration
 
@@ -36,7 +36,7 @@ If you're deploying the example application, it already conforms to these requir
 
 ### Use NPM to manage dependencies
 
-On every deploy action, OpDemand will run an `npm install` on all application workers to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a `package.json` file.  Here is an example `package.json`:
+On every deploy action, OpDemand will run an `npm install` on all application workers to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a [package.json](http://package.json.nodejitsu.com/) file.  Here is an example `package.json`:
 
 	{
     	"name": "example-nodejs-express"
