@@ -18,25 +18,24 @@ The simplest way to get started is by forking OpDemand's sample application loca
 
 After forking the project, clone it to your local workstation using the SSH-style URL:
 
-    $ git clone git@github.com:<your github username>/example-nodejs-express.git example-nodejs-express
+	$ git clone git@github.com:mygithubuser/example-nodejs-express.git example-nodejs-express
     $ cd example-nodejs-express
 
-If you want to use an existing application, no problem -- just make sure
-its on GitHub (or on any own private git server*).
+If you want to use an existing application, no problem -- just make sure you've cloned it from GitHub.
 
 Prepare your Application
 ------------------------
 To use a Node.js application with OpDemand, you will need to conform to 3 basic requirements:
 
- * Use [**NPM**](http://search.npmjs.org/) to manage dependencies
- * Use **Foreman** to manage processes
+ * Use [**npm**](http://npmjs.org/) to manage dependencies
+ * Use [**foreman**](http://ddollar.github.com/foreman/) to manage processes
  * Use **Environment Variables** to manage configuration
 
-If you're deploying the example application, it already conforms to these requirements.  If you're in a rush, skip to [Create a Platform](#create).
+If you're deploying the example application, it already conforms to these requirements.  If you're in a rush, skip to [Create a new Service](#create-a-new-service).
 
 ### Use NPM to manage dependencies
 
-On every deploy action, OpDemand will run an `npm install` on all application workers to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a [package.json](http://package.json.nodejitsu.com/) file.  Here is an example `package.json`:
+On every deploy action, OpDemand will run an `npm install` on all application workers to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a [`package.json`](http://package.json.nodejitsu.com/) file.  Here is an example `package.json`:
 
 	{
     	"name": "example-nodejs-express"
@@ -56,7 +55,7 @@ On every deploy action, OpDemand will run an `npm install` on all application wo
 You can install your dependencies locally using an `npm install`:
 
 	$ npm install
-	express@2.5.4 ./node_modules/express 
+	express@2.5.4 ./node_modules/express
 	├── mkdirp@0.0.7
 	├── mime@1.2.5
 	├── qs@0.5.0
@@ -97,7 +96,8 @@ The same is true for external services like databases, caches and queues.  Here 
 	    showStack: true
 	  )
 
-<a id="create"></a>Create a new Platform
+<a name="create-a-new-service"></a>
+Create a new Service
 ---------------------
 Use the `opdemand list` command to list the available infrastructure templates:
 
@@ -107,13 +107,13 @@ Use the `opdemand list` command to list the available infrastructure templates:
 	app/nodejs/4node: Node.js Application (4-node with ELB)
 	app/nodejs/Nnode: Node.js Application (Auto Scaling)
 
-Use the `opdemand create` command to create a new platform based on one of the templates listed.  To create an `app/nodejs/1node` platform with `app` as its handle/nickname.
+Use the `opdemand create` command to create a new service based on one of the templates listed.  To create an `app/nodejs/1node` service with `app` as its handle/nickname.
 
 	$ opdemand create app --template=app/nodejs/1node
 
-Configure the Platform
+Configure the Service
 ----------------------
-To quickly configure a platform from the command-line use `opdemand config [handle] --repository=detect`.  This will attempt to detect and install repository configuration including:
+To quickly configure a service from the command-line use `opdemand config [handle] --repository=detect`.  This will attempt to detect and install repository configuration including:
 
 * Detecting your GitHub repository URL, project and username
 * Generating and installing a secure SSH Deploy Key
@@ -125,25 +125,25 @@ More detailed configuration can be done using:
 
 Detailed configuration changes are best done via the web console, which exposes additional helpers, drop-downs and overrides.
 
-Start the Platform
+Start the Service
 ------------------
-To start your platform use the `opdemand start` command:
+To start your service use the `opdemand start` command:
 
 	$ opdemand start app
-	
-You will see real-time streaming log output as OpDemand orchestrates the platform's infrastructure and triggers the necessary SSH deployments.  Once the platform has finished starting you can access its services using an `opdemand show`.
+
+You will see real-time streaming log output as OpDemand orchestrates the service's infrastructure and triggers the necessary SSH deployments.  Once the service has finished starting you can access its services using an `opdemand show`.
 
     $ opdemand show app
 
 	Application URL (URL used to access this application)
 	http://ec2-23-20-231-188.compute-1.amazonaws.com
 
-Open the URL and you should see "Powered by OpDemand" in your browser.  To check on the status of your platforms, use the `opdemand status` command:
+Open the URL and you should see "Powered by OpDemand" in your browser.  To check on the status of your services, use the `opdemand status` command:
 
 	$ opdemand status
 	app: Node.js Application (1-node) (status: running)
 
-Deploy the Platform
+Deploy the Service
 ----------------------
 As you make changes to your application code, push those to GitHub as you would normally.  When you're ready to deploy those changes, use the `opdemand deploy` command:
 
@@ -155,4 +155,3 @@ This will trigger an OpDemand deploy action which will -- among other things -- 
 Additional Resources
 ====================
 * <http://www.opdemand.com>
-
