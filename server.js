@@ -1,7 +1,7 @@
 var app = require('express').createServer();
 
 app.get('/', function(req, res){
-  res.send('Powered by OpDemand');
+  res.send('Powered by OpDemand!');
 });
 
 /* Use PORT environment variable if it exists */
