@@ -125,7 +125,7 @@ OpDemand provides reasonable defaults, but you'll want to review a few configura
  * Repository Revision (defaults to master)
  * Repository Key (optional, only needed for private repositories)
 
-*Note: If your application resides in a private GitHub repository, click **Create Deploy Key** to have OpDemand automatically install a secure deploy key.*
+*Note: If your application resides in a private GitHub repository, click <Create Deploy Key> to have OpDemand automatically install a secure deploy key.*
 
 ###### EC2 Load Balancer, EC2 Security Group & EC2 Key Pair
 
@@ -163,7 +163,7 @@ Click the se the **Admin** button on the toolbar to SSH into Instances.  If you 
 
 As you make changes to your application, push your code to GitHub and click **Deploy** on the environment.  This will push out the latest configuration settings, pull down the latest source code from GitHub, install dependencies and restart services where necessary.
 
-*Note: *`opdemand deploy`* can also be used to trigger deploys from the command-line*
+*Note: `opdemand deploy` can also be used to trigger deploys from the command-line*
 
 
 ## Additional Resources
