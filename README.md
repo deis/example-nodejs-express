@@ -1,157 +1,174 @@
-Node.js Quick Start Guide
-=========================
+# Node.js Quick Start Guide
 
-This guide will walk you through deploying a Node.js application on AWS using OpDemand.
+This guide will walk you through deploying a Node.js application to Amazon EC2 using OpDemand.
 
-Prerequisites
---------------
-* A [free OpDemand account](https://app.opdemand.com/signup) with
-  * Valid AWS credentials
-  * Linked GitHub account
-* The OpDemand Command Line Interface
-* A Node.js application that is **hosted on GitHub**
+## Prerequisites
 
-Clone your Application
-----------------------
-The simplest way to get started is by forking OpDemand's sample application located at:
-<https://github.com/opdemand/example-nodejs-express>
+* An [OpDemand account](http://www.opdemand.com/nodejs/) that is [linked to your GitHub account](http://www.opdemand.com/docs/about-github-integration/)
+* An [OpDemand environment](http://www.opdemand.com/how-it-works/) that contains valid [AWS credentials](http://www.opdemand.com/docs/adding-aws-creds/)
 
-After forking the project, clone it to your local workstation using the SSH-style URL:
+## Setup your workstation
 
-	$ git clone git@github.com:mygithubuser/example-nodejs-express.git example-nodejs-express
+* Install [RubyGems](http://rubygems.org/pages/download)
+* Install [Foreman](http://ddollar.github.com/foreman/) with `gem install foreman`
+* Install a [Node.js](http://nodejs.org/) runtime (we recommend Node 0.10.x)
+
+## Clone your Application
+
+The simplest way to get started is by forking OpDemand's sample application located at <https://github.com/opdemand/example-nodejs-express>.  After forking the project, clone it to your local workstation using the SSH-style URL:
+
+	$ git clone git@github.com:mygithubuser/example-nodejs-express.git
     $ cd example-nodejs-express
 
-If you want to use an existing application, no problem -- just make sure you've cloned it from GitHub.
+If you want to use an existing application, no problem.
 
-Prepare your Application
-------------------------
+## Prepare your Application
+
 To use a Node.js application with OpDemand, you will need to conform to 3 basic requirements:
 
- * Use [**npm**](http://npmjs.org/) to manage dependencies
- * Use [**foreman**](http://ddollar.github.com/foreman/) to manage processes
- * Use **Environment Variables** to manage configuration
+ 1. Use [**npm**](http://npmjs.org/) to manage dependencies
+ 2. Use [**foreman**](http://ddollar.github.com/foreman/) to manage processes
+ 3. Use [**Environment Variables**](https://help.ubuntu.com/community/ EnvironmentVariables) to manage configuration inside your application
 
-If you're deploying the example application, it already conforms to these requirements.  If you're in a rush, skip to [Create a new Service](#create-a-new-service).
+If you're deploying the example application, it already conforms to these requirements.
 
-### Use NPM to manage dependencies
+#### 1. Use NPM to manage dependencies
 
-On every deploy action, OpDemand will run an `npm install` on all application workers to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a [`package.json`](http://package.json.nodejitsu.com/) file.  Here is an example `package.json`:
+Every time you deploy, OpDemand will run an `npm install` on all application instances to ensure dependencies are up to date.  NPM requires that you explicitly declare your dependencies using a [package.json](http://package.json.nodejitsu.com/) file.  Here is an example `package.json`:
 
-	{
-    	"name": "example-nodejs-express"
-	  , "version": "0.0.1"
-	  , "engines": {
-	      "node": "0.6.11",
-	      "npm":  "1.1.1"
-	    }
-	  , "private": true
-	  , "dependencies": {
-	      "express": "2.5.4"
-	  }
-	  , "devDependencies": {
-	  }
-	}
+    {
+      "name": "example-nodejs-express",
+      "version": "0.0.1",
+      "engines": {
+        "node": "0.10.x",
+        "npm": "1.2.x"
+      },
+      "dependencies": {
+        "express": "3.1.x"
+      }
+    }
 
-You can install your dependencies locally using an `npm install`:
+Install your dependencies locally using an `npm install`:
 
 	$ npm install
-	express@2.5.4 ./node_modules/express
-	├── mkdirp@0.0.7
-	├── mime@1.2.5
-	├── qs@0.5.0
-	└── connect@1.8.7
+    express@3.1.0 node_modules/express
+    ├── methods@0.0.1
+    ├── fresh@0.1.0
+    ├── range-parser@0.0.4
+    ├── cookie-signature@0.0.1
+    ├── buffer-crc32@0.1.1
+    ├── cookie@0.0.5
+    ├── debug@0.7.2
+    ├── commander@0.6.1
+    ├── mkdirp@0.3.3
+    ├── send@0.1.0 (mime@1.2.6)
+    └── connect@2.7.2 (pause@0.0.1, bytes@0.1.0, formidable@1.0.11, qs@0.5.1)
 
-### Use Foreman to manage processes
+If you require any system packages, you can install those later using a custom deploy script or by specifying a list of custom packages in the Instance configuration.
 
-OpDemand uses a Foreman Procfile to manage the processes that serve up your application.  The `Procfile` is how you define the command(s) used to run your application.  Here is an example `Procfile`:
+#### 2. Use Foreman to manage processes
+
+OpDemand uses [Foreman](http://ddollar.github.com/foreman/) to manage the processes that serve up your application.  Foreman relies on a `Procfile` that lives in the root of your repository.  This is where you define the command(s) used to run your application.  Here is an example `Procfile`:
 
 	web: node server.js
 
-This tells OpDemand to run one web process using the command `node server.js`.  You can test this out locally by running `foreman start`.
+This tells OpDemand to run one web process using the command `node server.js`.  You can test this locally by running `foreman start`.
 
 	$ foreman start
 	11:48:48 web.1     | started with pid 67810
-	11:48:48 web.1     | Server listening on port 3000 in development mode
+	11:48:48 web.1     | Server listening on port 5000 in development mode
 
-### Use Environment Variables to manage configuration
+#### 3. Use Environment Variables to manage configuration
 
-OpDemand uses environment variables to manage your application's configuration.  For example, the application listener must use the value of the `APPLICATION_PORT` environment variable.  The following code snippet demonstrates how this can work inside your application:
+OpDemand uses environment variables to manage your application's configuration.  For example, your application listener must use the value of the `PORT` environment variable.  The following code snippet demonstrates how this can work inside your application:
 
-	/* Use APPLICATION_PORT environment variable if it exists */
-	try {
-	  var port = process.env.APPLICATION_PORT
-	} catch(err) {
-	  var port = 3000
-	}
+	/* Use PORT environment variable if it exists, otherwise use 5000 */
+    var port = process.env.PORT || 5000
 
-The same is true for external services like databases, caches and queues.  Here is an example in CoffeeScript that shows how to connect to a MongoDB database using the `DATABASE_HOST` environment variable:
+The same is true for external services like databases, caches and queues.  Here is an example of how to connect to a MongoDB database using a `MONGODB_HOST` environment variable:
 
-	app.configure "development", ->
-	  db_host = process.env.DATABASE_HOST || 'localhost'
-	  db_url = "mongodb://#{db_host}/mydb"
-	  console.log "connecting to database at %s", db_url
-	  mongoose.connect db_url
-	  app.use express.errorHandler(
-	    dumpExceptions: true
-	    showStack: true
-	  )
+	db_host = process.env.MONGODB_HOST || "localhost";
+	db_url = "mongodb://" + db_host + "/mydb";
+	
+	var mongoose = require('mongoose');
+	mongoose.connect(db_url);
 
-<a name="create-a-new-service"></a>
-Create a new Service
----------------------
-Use the `opdemand list` command to list the available infrastructure templates:
+## Add a Node.js Stack to your Environment
 
-	$ opdemand list | grep nodejs
-	app/nodejs/1node: Node.js Application (1-node)
-	app/nodejs/2node: Node.js Application (2-node with ELB)
-	app/nodejs/4node: Node.js Application (4-node with ELB)
-	app/nodejs/Nnode: Node.js Application (Auto Scaling)
+We now have an application that is ready for deployment, along with an OpDemand environment [that includes AWS credentials](http://www.opdemand.com/docs/adding-aws-creds/).  Let's add a basic Node.js stack:
 
-Use the `opdemand create` command to create a new service based on one of the templates listed.  To create an `app/nodejs/1node` service with `app` as its handle/nickname.
+* Click the **Add/Discover Services** button
+* Select the Node.js stack and press **Save**
 
-	$ opdemand create app --template=app/nodejs/1node
+A typical application stack includes:
 
-Configure the Service
-----------------------
-To quickly configure a service from the command-line use `opdemand config [handle] --repository=detect`.  This will attempt to detect and install repository configuration including:
+* An **EC2 Load Balancer** used to route traffic to your EC2 instances
+* An **EC2 Instance** used to host the application with an Nginx front-end
+* An **EC2 Security Group** used as a virtual firewall inside EC2
+* An **EC2 Key Pair** used for SSH'ing into instances for deployment automation
 
-* Detecting your GitHub repository URL, project and username
-* Generating and installing a secure SSH Deploy Key
+## Deploy the Environment
 
-More detailed configuration can be done using:
+To deploy this application stack to EC2, simply press the green deploy button on the environment toolbar.
 
-	$ opdemand config app					   # the entire config wizard (all sections)
-	$ opdemand config app --section=provider   # only the "provider" section
+![Deploy your environment](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-1.04.35-PM.png)
 
-Detailed configuration changes are best done via the web console, which exposes additional helpers, drop-downs and overrides.
+### Specify Required Configuration
 
-Start the Service
-------------------
-To start your service use the `opdemand start` command:
+OpDemand provides reasonable defaults, but you'll want to review a few configuration values.  For a Node.js application, you'll be prompted for:
 
-	$ opdemand start app
+###### EC2 Instance
 
-You will see real-time streaming log output as OpDemand orchestrates the service's infrastructure and triggers the necessary SSH deployments.  Once the service has finished starting you can access its services using an `opdemand show`.
+ * EC2 Region, Zone, & Instance Type
+ * SSH Keys for server access (optional)
+ * Repository URL (defaults to the example project, or point it to your own)
+ * Repository Revision (defaults to master)
+ * Repository Key (optional, only needed for private repositories)
 
-    $ opdemand show app
+*Note: If your application resides in a private GitHub repository, click **Create Deploy Key** to have OpDemand automatically install a secure deploy key.*
 
-	Application URL (URL used to access this application)
-	http://ec2-23-20-231-188.compute-1.amazonaws.com
+###### EC2 Load Balancer, EC2 Security Group & EC2 Key Pair
 
-Open the URL and you should see "Powered by OpDemand" in your browser.  To check on the status of your services, use the `opdemand status` command:
+ * EC2 Region
+ * Name (auto-generated by default)
 
-	$ opdemand status
-	app: Node.js Application (1-node) (status: running)
+### Save & Continue
 
-Deploy the Service
-----------------------
-As you make changes to your application code, push those to GitHub as you would normally.  When you're ready to deploy those changes, use the `opdemand deploy` command:
+Once you've reviewed and modified the required configuration, press **Save & Continue** to save updated configuration and trigger your first deploy.
 
-	$ opdemand deploy app
+### Wait for Active
 
-This will trigger an OpDemand deploy action which will -- among other things -- update configuration settings, pull down the latest source code, install new dependencies and restart services where necessary.
+OpDemand will now orchestrate the deployment of your application stack.  Once the environment has an **Active** status, you're good to go.
+
+* Watch the Key Pair and Instance build, deploy and become **Active**
+* Watch the Instance build, deploy and become **Active** (this takes a few minutes)
+* Watch the Load Balancer build, deploy and become **Active** (this takes a bit as well)
+
+*Note: While you wait for the Instance to become active, click into the Instance to watch real-time log feedback.*
+
+## Access your Application
+Once your application is active, you can access its published URLs on the Environment's **Monitor** tab.  You can also jump to any published URLs in the upper-right corner of the service:
+
+![Access your application](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-2.43.09-PM.png)
+
+For the example application you should see: *Powered by OpDemand*
+
+###### SSH Access
+
+Click the se the **Admin** button on the toolbar to SSH into Instances.  If you didn't add your SSH key initially, you can always modify SSH keys later and **Deploy** again to update the Instance.
+
+![SSH into your Instance](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-1.10.19-PM.png)
+
+## Update your Application
+
+As you make changes to your application, push your code to GitHub and click **Deploy** on the environment.  This will push out the latest configuration settings, pull down the latest source code from GitHub, install dependencies and restart services where necessary.
+
+*Note: *`opdemand deploy`* can also be used to trigger deploys from the command-line*
 
 
-Additional Resources
-====================
-* <http://www.opdemand.com>
+## Additional Resources
+
+* [Scaling Application Stacks behind a Load Balancer](http://www.opdemand.com/)
+* [Connecting Applications to Databases and other Backing Services](http://www.opdemand.com/)
+* [Using the OpDemand Command-Line Interface](http://www.opdemand.com/)
+* [Customizing OpDemand's Deployment Automation](http://www.opdemand.com/)
