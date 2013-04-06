@@ -9,7 +9,7 @@ This guide will walk you through deploying a Node.js application to Amazon EC2 u
 
 ## Setup your workstation
 
-* Install [RubyGems](http://rubygems.org/pages/download)
+* Install [RubyGems](http://rubygems.org/pages/download) to get the `gem` command on your workstation
 * Install [Foreman](http://ddollar.github.com/foreman/) with `gem install foreman`
 * Install a [Node.js](http://nodejs.org/) runtime (we recommend Node 0.10.x)
 
@@ -20,15 +20,15 @@ The simplest way to get started is by forking OpDemand's sample application loca
 	$ git clone git@github.com:mygithubuser/example-nodejs-express.git
     $ cd example-nodejs-express
 
-If you want to use an existing application, no problem.
+If you want to use an existing application instead, no problem.
 
 ## Prepare your Application
 
 To use a Node.js application with OpDemand, you will need to conform to 3 basic requirements:
 
- 1. Use [**npm**](http://npmjs.org/) to manage dependencies
- 2. Use [**foreman**](http://ddollar.github.com/foreman/) to manage processes
- 3. Use [**Environment Variables**](https://help.ubuntu.com/community/ EnvironmentVariables) to manage configuration inside your application
+ 1. Use [npm](http://npmjs.org/) to manage dependencies
+ 2. Use [foreman](http://ddollar.github.com/foreman/) to manage processes
+ 3. Use [Environment Variables](https://help.ubuntu.com/community/ EnvironmentVariables) to manage configuration inside your application
 
 If you're deploying the example application, it already conforms to these requirements.
 
@@ -48,7 +48,7 @@ Every time you deploy, OpDemand will run an `npm install` on all application ins
       }
     }
 
-Install your dependencies locally using an `npm install`:
+Install your dependencies on your local workstation using an `npm install`:
 
 	$ npm install
     express@3.1.0 node_modules/express
@@ -72,7 +72,7 @@ OpDemand uses [Foreman](http://ddollar.github.com/foreman/) to manage the proces
 
 	web: node server.js
 
-This tells OpDemand to run one web process using the command `node server.js`.  You can test this locally by running `foreman start`.
+This tells OpDemand to run web processes using the command `node server.js`.  You can test this locally by running `foreman start`.
 
 	$ foreman start
 	11:48:48 web.1     | started with pid 67810
@@ -98,7 +98,7 @@ The same is true for external services like databases, caches and queues.  Here 
 We now have an application that is ready for deployment, along with an OpDemand environment [that includes AWS credentials](http://www.opdemand.com/docs/adding-aws-creds/).  Let's add a basic Node.js stack:
 
 * Click the **Add/Discover Services** button
-* Select the Node.js stack and press **Save**
+* Select the **Node.js** stack and press **Save**
 
 A typical application stack includes:
 
@@ -109,7 +109,7 @@ A typical application stack includes:
 
 ## Deploy the Environment
 
-To deploy this application stack to EC2, simply press the green deploy button on the environment toolbar.
+To deploy this application stack to EC2, press the green deploy button on the environment toolbar.
 
 ![Deploy your environment](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-1.04.35-PM.png)
 
@@ -120,12 +120,12 @@ OpDemand provides reasonable defaults, but you'll want to review a few configura
 ###### EC2 Instance
 
  * EC2 Region, Zone, & Instance Type
- * SSH Keys for server access (optional)
+ * SSH Authorized Keys (optional, used for accessing Instances over SSH)
  * Repository URL (defaults to the example project, or point it to your own)
  * Repository Revision (defaults to master)
  * Repository Key (optional, only needed for private repositories)
 
-*Note: If your application resides in a private GitHub repository, click <Create Deploy Key> to have OpDemand automatically install a secure deploy key.*
+If your application resides in a private GitHub repository, click **Create Deploy Key** to have OpDemand automatically install a secure deploy key using the GitHub API.
 
 ###### EC2 Load Balancer, EC2 Security Group & EC2 Key Pair
 
@@ -134,20 +134,21 @@ OpDemand provides reasonable defaults, but you'll want to review a few configura
 
 ### Save & Continue
 
-Once you've reviewed and modified the required configuration, press **Save & Continue** to save updated configuration and trigger your first deploy.
+Once you've reviewed and modified the required configuration, press **Save & Continue** to save updated configuration and initiate your first deploy.
 
-### Wait for Active
+### Wait until Active
 
-OpDemand will now orchestrate the deployment of your application stack.  Once the environment has an **Active** status, you're good to go.
+OpDemand will now orchestrate the deployment of your application stack.  Once the environment has an **Active** status, you're good to go.  However, this can take a while depending on the cloud infrastructure, instance sizes, what's happening in the build/deploy scripts (are you compiling something?) and general cloud provider variability.  While you wait you can:
 
-* Watch the Key Pair and Instance build, deploy and become **Active**
+* Watch the Key Pair and Security Group build, deploy and become **Active**
 * Watch the Instance build, deploy and become **Active** (this takes a few minutes)
 * Watch the Load Balancer build, deploy and become **Active** (this takes a bit as well)
 
-*Note: While you wait for the Instance to become active, click into the Instance to watch real-time log feedback.*
+While you wait for the Instance to become active, click into the Instance to watch real-time log feedback.
 
 ## Access your Application
-Once your application is active, you can access its published URLs on the Environment's **Monitor** tab.  You can also jump to any published URLs in the upper-right corner of the service:
+
+Once your application is active, you can access its published URLs on the Environment's **Monitor** tab.  You can also jump to any published URL in the upper-right corner of the service:
 
 ![Access your application](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-2.43.09-PM.png)
 
@@ -155,20 +156,20 @@ For the example application you should see: *Powered by OpDemand*
 
 ###### SSH Access
 
-Click the se the **Admin** button on the toolbar to SSH into Instances.  If you didn't add your SSH key initially, you can always modify SSH keys later and **Deploy** again to update the Instance.
+Click the **SSH** button on the toolbar to SSH into Instances.  If you didn't add your SSH key initially, you can always modify SSH keys later, Save the new configuration and **Deploy** again to update the Instance.
 
 ![SSH into your Instance](http://www.opdemand.com/wp-content/uploads/2013/03/Screen-Shot-2013-03-27-at-1.10.19-PM.png)
 
 ## Update your Application
 
-As you make changes to your application, push your code to GitHub and click **Deploy** on the environment.  This will push out the latest configuration settings, pull down the latest source code from GitHub, install dependencies and restart services where necessary.
+As you make changes to your application or deployment automation, push your code to GitHub and click **Deploy** on the environment.  This will push out the latest configuration settings, pull down the latest source code from GitHub, install dependencies and restart services where necessary.
 
-*Note: `opdemand deploy` can also be used to trigger deploys from the command-line*
+If you want to integrate OpDemand into your command-line workflow, `opdemand deploy` can also be used to trigger deploys.  See [Using the OpDemand Command-Line Interface](http://www.opdemand.com/docs/) more details.
 
 
 ## Additional Resources
 
-* [Scaling Application Stacks behind a Load Balancer](http://www.opdemand.com/)
-* [Connecting Applications to Databases and other Backing Services](http://www.opdemand.com/)
-* [Using the OpDemand Command-Line Interface](http://www.opdemand.com/)
-* [Customizing OpDemand's Deployment Automation](http://www.opdemand.com/)
+* [Scaling Application Stacks behind a Load Balancer](http://www.opdemand.com/docs/)
+* [Connecting Applications to Databases and other Backing Services](http://www.opdemand.com/docs/)
+* [Using the OpDemand Command-Line Interface](http://www.opdemand.com/docs/)
+* [Customizing OpDemand's Deployment Automation](http://www.opdemand.com/docs/)
