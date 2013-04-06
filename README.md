@@ -145,8 +145,9 @@ While you wait for the Instance to become active, click into the Instance to wat
 
 ### Troubleshooting
 
-It's not uncommon to experience errors when provisioning new stacks from scratch.  As you work on customizing configuration, you may need to **Destroy** and **Deploy** the environment multiple times before the automation works reliably.
+It's not uncommon to experience errors or warnings during deploys.  As you make changes, expect to **Deploy** the environment a few times before one-click deployment works reliably.
 
+* For *Warnings*, try re-deploying to bring the service back to Active status
 * For *Cloud Provider API* Errors, check the service's primary configuration fields
 * For *SSH Key* Errors, make sure Deployment configuration sections contain valid SSH private keys
 * For *SSH Return Code* Errors, SSH into an instance and make sure the Build & Deploy scripts execute successfully
