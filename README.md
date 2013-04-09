@@ -76,6 +76,8 @@ This tells OpDemand to run web processes using the command `node server.js`.  Yo
 	11:48:48 web.1     | started with pid 67810
 	11:48:48 web.1     | Server listening on port 5000 in development mode
 
+You should now be able to access your application locally at <http://localhost:5000>.
+
 #### 3. Use Environment Variables to manage configuration
 
 OpDemand uses environment variables to manage your application's configuration.  For example, your application listener must use the value of the `PORT` environment variable.  The following code snippet demonstrates how this can work inside your application:
@@ -119,7 +121,7 @@ OpDemand provides reasonable defaults, but you'll want to review a few configura
 * Make sure the *Repository URL* and *Repository Revision* are correct for your application
 * If your app is in a private GitHub repository, click **Create Deploy Key** to have OpDemand install a secure deploy key using the GitHub API
 
-Once you've reviewed and modified the required configuration, press **Save & Continue** to save the configuration and initiate your first deploy.
+Once you've reviewed and modified the required configuration, press **Save & Continue** to initiate your first deploy.
 
 ### Wait until Active
 
@@ -156,12 +158,12 @@ For the example application you should see: *Powered by OpDemand*
 
 ## Update your Application
 
-As you make changes to your application or deployment automation:
+As you make changes to your application or deployment code:
 
 1. **Push** the code to GitHub
 2. **Deploy** the environment
 
-OpDemand will use the latest deployment automation to update configuration, pull down source code from GitHub, install dependencies, re-package your application and restart services where necessary.
+OpDemand will use the latest environment configuration to update cloud services, SSH into instances, pull down source code from GitHub, install dependencies, re-package your application and restart services where necessary.
 
 If you want to integrate OpDemand into your command-line workflow, `opdemand deploy` can also be used to trigger deploys.  See [Using the OpDemand Command-Line Interface](http://www.opdemand.com/docs/) more details.
 
