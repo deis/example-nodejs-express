@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 app.get('/', function(req, res){
-  res.send('Powered by Deis!');
+  res.send('Powered by ' + process.env.POWERED_BY);
 });
 
 /* Use PORT environment variable if it exists */
