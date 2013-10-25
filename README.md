@@ -18,9 +18,9 @@ If you do not yet have a controller or a Deis formation, please review the [Deis
 
 ## Clone your Application
 
-If you want to use an existing application, no problem.  You can also use the Deis sample application located at <https://github.com/bengrunfeld/example-nodejs-express>.  Clone the example application to your local workstation:
+If you want to use an existing application, no problem.  You can also use the Deis sample application located at <https://github.com/opdemand/example-nodejs-express>.  Clone the example application to your local workstation:
 
-	$ git clone https://github.com/bengrunfeld/example-nodejs-express.git
+	$ git clone https://github.com/opdemand/example-nodejs-express.git
 	$ cd example-nodejs-express
 
 ## Prepare your Application
@@ -118,14 +118,14 @@ Per the prerequisites, we assume you have access to an existing Deis formation. 
 Use the following command to create an application on an existing Deis formation.
 
 	$ deis create --formation=<formationName> --id=<appName>
-	Creating application... done, created excess-quacking
+	Creating application... done, created <appName>
 	Git remote deis added
 	
 If an ID is not provided, one will be auto-generated for you.
 
 ## Deploy your Application
 
-Use `git push` to deploy your application.
+Use `git push deis master` to deploy your application.
 
 	$ git push deis master
 	Counting objects: 152, done.
@@ -140,13 +140,13 @@ Once your application has been deployed, use `deis open` to view it in a browser
 
 ## Scale your Application
 
-To scale your application's [Docker](http://docker.io) containers, use `deis scale`.
+To scale your application's [Docker](http://docker.io) containers, use `deis scale` and specify the number of containers for each process type defined in your application's `Procfile`. For example, `deis scale web=8`.
 
 	$ deis scale web=8
 	Scaling containers... but first, coffee!
 	done in 14s
 	
-	=== excess-quacking Containers
+	=== <appName> Containers
 	
 	--- web: `node server.js`
 	web.1 up 2013-10-25T19:46:52.291Z (nodejsFormation-runtime-1)
@@ -163,17 +163,15 @@ To scale your application's [Docker](http://docker.io) containers, use `deis sca
 
 Deis applications are configured using environment variables. The example application includes a special `POWERED_BY` variable to help demonstrate how you would provide application-level configuration. 
 
-	$ curl -s http://yourapp.com
+	$ curl -s http://yourapp.yourformation.com
 	Powered by undefined
 	$ deis config:set POWERED_BY=NodeJS
-	=== excess-quacking
+	=== <appName>
 	POWERED_BY: NodeJS
-	$ curl -s http://yourapp.com
+	$ curl -s http://yourapp.yourformation.com
 	Powered by NodeJS
 
-This method is also how you connect your application to backing services like databases, queues and caches.
-
-To experiment in your application environment, use `deis run` to execute one-off commands against your application.
+`deis config:set` is also how you connect your application to backing services like databases, queues and caches. You can use `deis run` to execute one-off commands against your application for things like database administration, initial application setup and inspecting your container environment.
 
 	$ deis run ls -la
 	total 56
@@ -197,9 +195,9 @@ To experiment in your application environment, use `deis run` to execute one-off
 To view your application's log output, including any errors or stack traces, use `deis logs`.
 
 	$ deis logs
-	Oct 25 19:47:05 ip-172-31-24-118 excess-quacking[web.1]: Server listening on port 10001 in development mode
-	Oct 25 19:47:05 ip-172-31-24-118 excess-quacking[web.2]: Server listening on port 10002 in development mode
-	Oct 25 19:47:05 ip-172-31-24-118 excess-quacking[web.6]: Server listening on port 10006 in development mode
+	Oct 25 19:47:05 ip-172-31-24-118 <appName>[web.1]: Server listening on port 10001 in development mode
+	Oct 25 19:47:05 ip-172-31-24-118 <appName>[web.2]: Server listening on port 10002 in development mode
+	Oct 25 19:47:05 ip-172-31-24-118 <appName>[web.6]: Server listening on port 10006 in development mode
 
 
 ## Additional Resources
