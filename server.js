@@ -2,7 +2,11 @@ var express = require('express');
 var app = express();
 
 app.get('/', function(req, res){
-  res.send('Powered by ' + process.env.POWERED_BY);
+  var message = process.env.POWERED_BY;
+  if (typeof(message) == "undefined") {
+  	message = "Deis"
+  }
+  res.send('Powered by ' + message);
 });
 
 /* Use PORT environment variable if it exists */
