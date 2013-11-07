@@ -164,7 +164,7 @@ To scale your application's [Docker](http://docker.io) containers, use `deis sca
 Deis applications are configured using environment variables. The example application includes a special `POWERED_BY` variable to help demonstrate how you would provide application-level configuration. 
 
 	$ curl -s http://yourapp.yourformation.com
-	Powered by undefined
+	Powered by Deis
 	$ deis config:set POWERED_BY=NodeJS
 	=== <appName>
 	POWERED_BY: NodeJS
