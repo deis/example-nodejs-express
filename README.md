@@ -6,97 +6,111 @@ This guide will walk you through deploying a Node.js application on Deis.
 
 ```
 $ deis create
-Creating application... done, created klutzy-yodeling
+Creating application... done, created utmost-quadrant
 Git remote deis added
 $ git push deis master
-Counting objects: 3, done.
+Counting objects: 182, done.
 Delta compression using up to 4 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 340 bytes | 0 bytes/s, done.
-Total 3 (delta 2), reused 0 (delta 0)
+Compressing objects: 100% (86/86), done.
+Writing objects: 100% (182/182), 31.40 KiB | 0 bytes/s, done.
+Total 182 (delta 99), reused 168 (delta 93)
 -----> Node.js app detected
 
-       Node engine:         0.12.x
-       Npm engine:          unspecified
-       Start mechanism:     Procfile
-       node_modules source: package.json
-       node_modules cached: true
+-----> Creating runtime environment
 
+       NPM_CONFIG_LOGLEVEL=error
        NPM_CONFIG_PRODUCTION=true
+       NODE_ENV=production
        NODE_MODULES_CACHE=true
 
 -----> Installing binaries
-       Resolving node version 0.12.x via semver.io...
-       Downloading and installing node 0.12.2...
+       engines.node (package.json):  4.2.x
+       engines.npm (package.json):   unspecified (use default)
+
+       Resolving node version 4.2.x via semver.io...
+       Downloading and installing node 4.2.1...
+       Using default npm version: 2.14.7
+
+-----> Restoring cache
+       Skipping cache (new runtime signature)
 
 -----> Building dependencies
-       Node version changed (0.10.38 => 0.12.2); invalidating cache
-       Installing node modules
-       npm WARN package.json example-nodejs-express@0.0.2 No repository field.
-       express@3.1.2 node_modules/express
-       ├── methods@0.0.1
-       ├── fresh@0.1.0
-       ├── range-parser@0.0.4
-       ├── cookie-signature@1.0.0
-       ├── cookie@0.0.5
-       ├── buffer-crc32@0.2.5
-       ├── commander@0.6.1
-       ├── mkdirp@0.3.5
-       ├── debug@2.1.3 (ms@0.7.0)
-       ├── send@0.1.0 (mime@1.2.6)
-       └── connect@2.7.5 (pause@0.0.1, bytes@0.2.0, buffer-crc32@0.1.1, formidable@1.0.11, qs@0.5.1)
+       Pruning any extraneous modules
+       Installing node modules (package.json)
+       express@4.13.3 node_modules/express
+       ├── escape-html@1.0.2
+       ├── merge-descriptors@1.0.0
+       ├── cookie@0.1.3
+       ├── array-flatten@1.1.1
+       ├── methods@1.1.1
+       ├── utils-merge@1.0.0
+       ├── content-type@1.0.1
+       ├── cookie-signature@1.0.6
+       ├── fresh@0.3.0
+       ├── path-to-regexp@0.1.7
+       ├── serve-static@1.10.0
+       ├── range-parser@1.0.2
+       ├── vary@1.0.1
+       ├── etag@1.7.0
+       ├── content-disposition@0.5.0
+       ├── parseurl@1.3.0
+       ├── depd@1.0.1
+       ├── qs@4.0.0
+       ├── on-finished@2.3.0 (ee-first@1.1.1)
+       ├── finalhandler@0.4.0 (unpipe@1.0.0)
+       ├── debug@2.2.0 (ms@0.7.1)
+       ├── proxy-addr@1.0.8 (forwarded@0.1.0, ipaddr.js@1.0.1)
+       ├── send@0.13.0 (destroy@1.0.3, statuses@1.2.1, ms@0.7.1, mime@1.3.4, http-errors@1.3.1)
+       ├── type-is@1.6.9 (media-typer@0.3.0, mime-types@2.1.7)
+       └── accepts@1.2.13 (negotiator@0.5.3, mime-types@2.1.7)
 
------> Checking startup method
-       Found Procfile
+-----> Caching build
+       Clearing previous node cache
+       Saving 1 cacheDirectories (default):
+       - node_modules
 
------> Finalizing build
-       Creating runtime environment
-       Exporting binary paths
-       Cleaning up build artifacts
-       Caching node_modules for future builds
-
------> Build successful!
-       example-nodejs-express@0.0.2 /tmp/build
-       └── express@3.1.2
+-----> Build succeeded!
+       └── express@4.13.3
 
 -----> Discovering process types
        Procfile declares types -> web
------> Compiled slug size is 9.5M
+       Default process types for Node.js -> web
+-----> Compiled slug size is 12M
 
 -----> Building Docker image
-remote: Sending build context to Docker daemon 9.898 MB
+remote: Sending build context to Docker daemon 12.04 MB
 remote: build context to Docker daemon
 Step 0 : FROM deis/slugrunner
- ---> 9253e02953b8
-Step 1 : RUN mkdir -p /app
- ---> Using cache
- ---> 8d57561b2634
-Step 2 : WORKDIR /app
- ---> Using cache
- ---> da83519266bd
-Step 3 : ENTRYPOINT /runner/init
- ---> Using cache
- ---> 4c8e1f9d9a92
-Step 4 : ADD slug.tgz /app
- ---> b7891627dc23
-Removing intermediate container efa8adf558b8
-Step 5 : ENV GIT_SHA 1b9ddd3f5b3a80fc36a1c4d0839561a618af1dae
- ---> Running in 07f90658b767
- ---> 8d982a701025
-Removing intermediate container 07f90658b767
-Successfully built 8d982a701025
+# Executing 3 build triggers
+Trigger 0, RUN mkdir -p /app
+Step 0 : RUN mkdir -p /app
+ ---> Running in 1a2d3ba9c884
+Trigger 1, WORKDIR /app
+Step 0 : WORKDIR /app
+ ---> Running in 69207e2f294e
+Trigger 2, ADD slug.tgz /app
+Step 0 : ADD slug.tgz /app
+ ---> 70e81b093b39
+Removing intermediate container 1a2d3ba9c884
+Removing intermediate container 69207e2f294e
+Removing intermediate container ce138d0eda28
+Step 1 : ENV GIT_SHA d234c9a74dafaece1b01f7606768c74a83259e51
+ ---> Running in 2214fa7e6a7a
+ ---> 1434ea6d5996
+Removing intermediate container 2214fa7e6a7a
+Successfully built 1434ea6d5996
 -----> Pushing image to private registry
 
 -----> Launching...
-       done, klutzy-yodeling:v3 deployed to Deis
+       done, utmost-quadrant:v2 deployed to Deis
 
-       http://klutzy-yodeling.local3.deisapp.com
+       http://utmost-quadrant.local3.deisapp.com
 
        To learn more, use `deis help` or visit http://deis.io
 
-To ssh://git@deis.local3.deisapp.com:2222/klutzy-yodeling.git
+To ssh://git@deis.local3.deisapp.com:2222/utmost-quadrant.git
  * [new branch]      master -> master
-$ curl http://klutzy-yodeling.local3.deisapp.com
+$ curl http://utmost-quadrant.local3.deisapp.com
 Powered by Deis
 ```
 
