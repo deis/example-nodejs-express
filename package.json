@@ -1,10 +1,15 @@
 {
   "name": "example-nodejs-express",
-  "version": "0.0.3",
+  "version": "0.0.4",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/deis/example-nodejs-express.git"
+  },
+  "license": "Apache-2.0",
   "engines": {
-    "node": "4.2.x"
+    "node": "4.5.x"
   },
   "dependencies": {
-    "express": "4.13.x"
+    "express": "4.14.x"
   }
 }

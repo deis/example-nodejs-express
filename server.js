@@ -1,12 +1,29 @@
 var express = require('express');
+var exec = require('child_process').exec;
 var app = express();
 
+// Return a 200 for kubernetes healthchecks
+app.get('/healthz', function(req, res){
+  res.status(200).end();
+});
+
 app.get('/', function(req, res){
-  var message = process.env.POWERED_BY;
+  var poweredBy = process.env.POWERED_BY;
+  var release = process.env.WORKFLOW_RELEASE;
+
   if (typeof(message) == "undefined") {
-  	message = "Deis"
+  	poweredBy = "Deis";
   }
-  res.send('Powered by ' + message);
+
+  exec('hostname', function(error, stdout, stderr) {
+    container = "unknown";
+    // If exec was successful
+    if (error == null) {
+      container = stdout.trim();
+    }
+
+    res.send('Powered by ' + poweredBy + '\nRelease ' + release + ' on ' + container);
+  });
 });
 
 /* Use PORT environment variable if it exists */
